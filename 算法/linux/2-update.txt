@@ -1,0 +1,153 @@
+第二天：
+
+clear 	清屏
+
+root等超级管理员登录：[root@zhouguoqiang ~]#
+
+					   用户名@主机名  所在的目录 # 默认只有超级管理员才会使用#提示符
+
+					   [zhouguoqiang@zhouguoqiang ~]$
+					   普通用户使用 $
+
+					   ~ 用户的家目录
+					   root用户的家目录 /root
+					   普通用户 /home 如 zhouguoqiang账号那就是/home/zhouguoqiang
+
+					   一般用户的操作应该都要在自己的家目录下
+
+查看帮助文档: man
+              info
+
+文件操作：
+
+- 表示前一个工作目录
+
+pwd ： 显示当前所在的目录的绝对路径
+
+touch: 创建一个空白文件
+ 	touch a.txt b.txt c.txt 创建三个文件分别是a.txt b.txt c.txt
+
+ 	touch -c -m -a -t 202002101317 a.txt
+
+mkdir：创建目录
+
+	-p 递归创建目录
+	-m 指定权限
+
+rmdir：删除空目录
+rm ： 删除文件的命令
+
+	-f 强制删除
+	-r 递归删除
+	-i 提示是否要删除
+
+	rm -rf 递归强制删除 谨慎使用
+
+mv a.txt b.txt 重命名为b.txt
+mv a.txt /var/ 移动到/var
+mv a.txt /var/b.txt 移动到/var并且重命名为b.txt
+
+rename .php .html *.php  批量修改
+rename test abc test*
+
+cp 拷贝文件
+
+	-R 递归拷贝
+	-a 创建时间也会拷贝过来
+
+ls : list 显示当前目录下的文件信息
+
+	ls -l  以表格形式显示详细信息
+	-rw-rw-r--. 1 zhouguoqiang zhouguoqiang 0 7月  11 14:44 a.txt
+	-：文件的类型  -表示普通文件 d表示文件夹  l: 软链接文件 s:socket文件类型
+
+		链接文件：
+			软链接 (快捷方式) 不占inode
+			硬链接 拷贝  拷贝的是inode节点
+	ln a.txt b.txt
+
+
+	读:r
+	写:w
+	执行:x
+
+	可读可写可执行 : rwx => 7  
+					 421
+
+	使用数字给一个文件赋予权限：所有者可读可写，所属组只能查看，其他人只能写和执行: 643
+
+	修改文件权限的命令:
+		chmod 643 a.txt
+
+		u: 所有者 g代表所属组 o代表其他人 a 代表所有人
+		添加权限： chmod u+x a.txt
+				   chmod g+wx a.txt
+				   chmod o+w a.txt
+
+		删除权限：
+					chmod u-x a.txt
+					chmod o+r-wx a.txt 给其他人添加读权限但是去掉写和执行的权限
+
+	新建文件默认的权限是多少
+		0644
+	新建文件夹默认的权限多少
+		0755
+
+	umask: 查看权限掩码
+		0022 表示创建时要去掉这几个权限  0777 - 0022 = 0755 linux强制去掉执行权限  0755-0111= 0644
+
+		0777 - 0022 = 0755
+
+	文件的执行权限决定是否可以执行该文件 要执行文件必须赋予执行文件
+	目录的执行权限决定是否有权限进入该目录 cd dir
+
+	尝试去掉目录的读权限 看看能不能进行添加、删除、拷贝操作
+	尝试去掉目录的写权限，看看能不能进行添加、删除、拷贝操作
+
+	rw-rw-r-- 表示权限 三个部分 第一个rw-表示所有者的权限 第二个rw-表示所属组的权限 第三个r-- 其他人的权限 
+	. acl权限控制的位
+	1 文件数量
+	zhouguoqiang 文件的所属主
+	zhouguoqiang 文件的所属组
+	0 表示大小
+	7月  11 14:44  修改时间
+	a.txt 文件名
+
+
+	ls -a
+		显示所有文件包含隐藏文件 以.开头为隐藏文件
+	ls -d
+		显示目录
+
+	ls -S 根据文件大小进行逆序排序
+
+	ls -t 根据修改日期进行逆序排序
+
+	ls -k 大小用kb来表示
+
+	ls -m 使用逗号分隔来显示文件
+
+	ls -r 逆序排序
+
+
+
+
+stat 查看文件的信息
+file 查看文件的类型
+
+查看文件的内容:
+	cat/nano/nl/head/tail/tac/more /od 
+
+	tail -f a.txt 监控文件内容是否有变化，如果有变化则会显示出来
+
+查找/搜索 find
+ 	find 你要查找的目录路径  -name 名字
+
+    进行额外的操作:
+
+    	find / -name '.php' -exec ls -l {} \;
+
+
+ 给命令启别名
+ 	alias rm='rm -i';
+ 	alias vim='vi';

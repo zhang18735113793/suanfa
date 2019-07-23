@@ -1,0 +1,94 @@
+防火墙
+
+	
+	firewalls centos7中默认使用的firewalls
+
+		安装 ntsysv 网络服务管理工具 
+
+		yum install ntsysv   所有服务的，*表示开启 
+
+		service firewalld stop 
+
+	iptables 内置的防火墙，Centos默认没有打开
+
+		a. 如何开启iptables 安装 iptables-services iptables-devel
+		b. service iptables start
+		c. iptables -L -n 默认带的规则
+
+		   配置文件：/etc/sysconfig/iptables
+		   保存： service iptables save
+
+		iptables -L -n 查看防火墙的过滤规则 表
+				-L 列出所有的规则
+				-S chain  列出指定链上的所有规则
+				-F chain  删除指定链上所有规则
+				-n 把ip和端口号都打印出来
+
+		-t filter 过滤表 这是我们主要用的表
+
+			表-》链-》规则
+
+			链中规则的执行顺序，从上往下匹配，匹配到一个就终止，如果都不匹配则采用链的默认的方式(ACCEPT,DROP)
+
+		INPUT 入站规则
+		forward 转发规则
+		OUTPUT 出站规则
+
+		如何添加一个入站规则：
+
+			-I INPUT 第几条 插入  
+			-A 追加 
+			-R 替换
+			-C 修改
+			-D 删除  -D INPUT 1 删除INPUT链上第1条规则，条数从1开始
+			-j 处理的方式 ACCEPT(接收) REJECT(拒绝)  DROP(丢掉)
+
+
+		参数： -4 ipv4 -6 ipv6
+			   -p 协议 tcp udp icmp ip
+			   -s 来源地址  -s 192.168.6.10
+			   --sport 来源端口号  --sport 1200
+			   -d 目标地址 -d 192.168.6.120
+			   --dport 目标端口 --dport 8080
+			   -i 网卡  -i enp0S8  -i lo 本地回环请求
+			   					   127.0.0.1 
+			   -m mac mac地址 
+			   iptables  -A INPUT  -m  mac  --mac-source  aa:bb:cc:dd:ee:ff  -j  DROP
+
+
+		target     prot opt source               destination
+		target ： 代表进行的操作，ACCEPT是放行，REJECT则是拒绝，DROP表示丢弃
+		prot ： 代表使用的数据包协议，主要有 TCP、UDP及ICMP 3种数据包格式
+		opt ： 额外的选项说明
+		source： 代表此规则是针对哪个来源的IP进行限制
+		destination：代表此规则是针对哪个目标IP进行限制
+
+		追加一条规则：
+
+			1. iptables —A INPUT -p tcp -s 192.168.6.10 -j ACCEPT
+			2. iptables -A INPUT -p tcp --dport 8080 -j ACCEPT
+			3. iptables -I INPUT 1 -p tcp -s 192.168.6.10 --sport 1100 -d 192.168.6.120 --dport 8080 -j ACCEPT
+
+
+		端口号：不能用1024以内的端口
+
+
+SELINUX 安全策略机制
+
+	工作模式： enforce 强制
+			   permissive 宽容模式
+			   disabled 关闭模式
+
+	getenforce 查看selinux的工作模式
+	setenforce [0|1]  0表示宽容模式 1表示强制模式
+
+	关闭selinux ：
+		进入/etc/selinux/config 将SELINUX=disabled
+		一定要重新启动操作系统才能生效
+
+服务相关：
+	service 服务名字 [start|restart|stop|status]
+	centos7 : systemctl [start|restart|stop|status] 服务名字.service
+			systemctl start iptables.service
+
+

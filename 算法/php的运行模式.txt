@@ -1,0 +1,25 @@
+﻿php原型模式sapi有哪些
+
+php-cli 命令行模式
+cgi     
+fastcgi  phpfpm
+mod     apache加载php的模式
+isapi        IIS
+
+php 如何判断当前是什么运行模式
+	php_sapi_name()
+
+php -v 查看php的版本
+	-m 查看php已经安装的扩展
+	-i phpinfo的信息
+	php -f 执行哪个文件 php -f a.php
+	php -a 进入命令行的交互模式，便于测试
+	php -S 192.168.6.121:80 启动web服务，服务器地址为192.168.6.121，提供服务的端口为80
+	php -S 0.0.0.0:80 表示服务器所有的地址80端口均接收请求并提供服务
+php 在命令行中不能用get post来接收值
+
+	1. 如何传递  php a.php a b c d
+	2. 如何接收  $argv 数组 下标为0是文件名 其他的是参数
+				 $argc 参数个数
+
+	php使用将一个数的二进制输出来

@@ -1,0 +1,25 @@
+php如何调用其他程序
+
+exec
+	exec( string $command[, array &$output[, int &$return_var]] ) : string
+	传递第一个参数，只返回最后一行的数据
+	传递第二个参数，则所有结果以行为单位存到$output数组中
+	传递的第三个参数用于记录命令执行成功或失败的状态，0表示成功非0表示出错了
+
+system
+	system( string $command[, int &$return_var] )
+	运行的结果php接收不到，它是直接输出，第二个参数接收的是执行成功或失败的状态码
+
+passthru
+
+	passthru( string $command[, int &$return_var] ) : void
+
+	运行的结果php接收不到，它是直接输出，第二个参数接收的是执行成功或失败的状态码
+``	
+	返回执行结果的字符串，执行失败返回NULL
+
+
+<?php
+
+	$res = `ls -l`;
+	var_dump($res);
